@@ -1,3 +1,5 @@
+
+
 // Soldier
 function Soldier(health, strength) {
   this.health = health;
@@ -18,8 +20,8 @@ function Viking(name, health, strength) {
   this.name = name;
 }
 
-Viking.prototype = Object.create(Soldier.prototype);
-Viking.prototype.constructor = Viking;
+Viking.prototype = Object.create(Soldier.prototype); //Inherited
+Viking.prototype.constructor = Viking; //Inherited
 
 Viking.prototype.attack = function () {
   return this.strength;
@@ -35,28 +37,56 @@ Viking.prototype.receiveDamage = function (strength) {
   }
 }
 
+Viking.prototype.battleCry = function () {
+  return 'Hark owns you all!'
+}
+
 //Still working a bit on this one.
 // Saxon
-function Saxon() {
+function Saxon(health, strength) {
+  Soldier.call.(this, health, strength);
+
+  Saxon.prototype = Object.create(Soldier.prototype); //Inherited
+  Saxon.prototype.constructor = Saxon; //Inherited
 
 }
 
 // // War
 
-// function War() {
+function War() {
+  this.VikingArmy = [];
+  this.SaxonArmy = [];
+}
 
-// var vikingArmy = [];
+War.prototype.addViking = function (vikingToAdd) {
+  this.VikingArmy.push(vikingToAdd);
+}
 
-// var saxonArmy = [];
+War.prototype.addSaxon = function (SaxonToAdd) {
+  this.SaxonArmy.push(SaxonToAdd);
+}
 
-// addViking(VikingArmy);
 
-// addSaxon();
+War.prototype.vikingAttack = function () {
+  var vikIndex = Math.floor(Math.random() * this.VikingArmy.length);
+  var saxIndex = Math.floor(Math.random() * this.SaxonArmy.length);
+  var randViking = this.VikingArmy[vikIndex];
+  var randSaxon = this.SaxonArmy[saxIndex];
 
-// vikingAttack();
+  randSaxon.receiveDamage(randViking.attack())
+  var result = randSaxon.receiveDamage(randViking.attack())
+  if (randSaxon.health <= 0) {
+    this.SaxonArmy.splice(saxIndex, 1);
+  }
 
-// saxonAttack();
+  War.prototype.showStatus = function () {
+    if (this.VikingArmy.length === 0) {
+      return "Saxons have fought for their lives and survive another day..."
+    }
+    if (this.SaxonArmy.length === 0) {
+      return "Vikings have won the war of the century!"
+    }
+    return "Vikings and Saxons are still in the thick of battle."
 
-// showStatus();
-
-// }
+  }
+}
